@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">fitbit_api_test</string>
+    <string name="filter_view_https_gizmos">https://www.example.com/gizmos</string>
+    <string name="filter_view_example_gizmos">example://gizmos</string>
+</resources>
