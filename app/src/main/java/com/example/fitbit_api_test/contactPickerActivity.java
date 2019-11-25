@@ -9,8 +9,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
@@ -47,6 +52,7 @@ public class contactPickerActivity extends AppCompatActivity {
             }
         });
 
+        //call button click logic
         Button callButton = findViewById(R.id.callButton);
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +73,38 @@ public class contactPickerActivity extends AppCompatActivity {
                 startActivity(phoneIntent);
             }
         });
+
+        Button beepButton = findViewById(R.id.beepButton);
+        beepButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playBeep();
+                vibrateForTime(1000);
+            }
+        });
+    }
+
+    public void vibrateForTime(int duration)
+    {
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            v.vibrate(duration);
+        }
+    }
+
+    public void playBeep()
+    {
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setPageContent(){
