@@ -82,8 +82,18 @@ public class contactPickerActivity extends AppCompatActivity {
                 vibrateForTime(1000);
             }
         });
+
+        Button gotoSuggestionsButton = findViewById(R.id.gotoSuggestionsButton);
+        gotoSuggestionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent coffeeActviityIntent = new Intent(contactPickerActivity.this, coffeeSuggestionsActivity.class);
+                startActivity(coffeeActviityIntent);
+            }
+        });
     }
 
+    //function to vibrate for specific time in milliseconds
     public void vibrateForTime(int duration)
     {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -96,12 +106,13 @@ public class contactPickerActivity extends AppCompatActivity {
         }
     }
 
+    //function to play beep sound
     public void playBeep()
     {
         try {
             Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-            r.play();
+            r.play( );
         } catch (Exception e) {
             e.printStackTrace();
         }
