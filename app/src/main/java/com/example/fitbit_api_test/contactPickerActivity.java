@@ -1,10 +1,13 @@
 package com.example.fitbit_api_test;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -43,6 +46,27 @@ public class contactPickerActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
+
+        Button callButton = findViewById(R.id.callButton);
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+                String phoneNumber = readSharedPreference("emergency_contact_number");
+                phoneIntent.setData(Uri.parse("tel:"+phoneNumber));
+                if (ActivityCompat.checkSelfPermission(contactPickerActivity.this,
+                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    Log.d("phone call button", "no permission");
+                    final int REQUEST_PHONE_CALL = 1;
+                    ActivityCompat.requestPermissions(contactPickerActivity.this,
+                            new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL
+                            );
+                    return;
+                }
+                Log.d("phone call button", "calling");
+                startActivity(phoneIntent);
+            }
+        });
     }
 
     public void setPageContent(){
@@ -52,6 +76,7 @@ public class contactPickerActivity extends AppCompatActivity {
         String contact_number = readSharedPreference("emergency_contact_number");
         TextView messageTextView = findViewById(R.id.contactMessageTextView);
         Button pickContactButton = findViewById(R.id.chooseContactButton);
+        Button callButton = findViewById(R.id.callButton);
         TextView contactNameTextView = findViewById(R.id.contactNameTextView);
         TextView contactNumberTextView = findViewById(R.id.contactNumberTextView);
         if(contact_name!=null)
@@ -60,6 +85,8 @@ public class contactPickerActivity extends AppCompatActivity {
             pickContactButton.setText("Change Contact");
             contactNameTextView.setText(contact_name);
             contactNumberTextView.setText(contact_number);
+            callButton.setText("Call "+contact_name);
+            callButton.setVisibility(Button.VISIBLE);
         }
         else
         {
@@ -67,6 +94,7 @@ public class contactPickerActivity extends AppCompatActivity {
             pickContactButton.setText("Pick Contact");
             contactNameTextView.setText("");
             contactNumberTextView.setText("");
+            callButton.setVisibility(Button.INVISIBLE);
         }
 
 
