@@ -2,6 +2,7 @@ package com.example.fitbit_api_test;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import okhttp3.HttpUrl;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Clicked on login button", Toast.LENGTH_SHORT).show();
                 performAuthorization();
             }
         });
@@ -43,14 +47,20 @@ public class MainActivity extends AppCompatActivity {
                 String access_token = fragments[1];
                 Log.d("access token", access_token);
 
-                saveAccessToken("access_token", access_token);
+                saveSharedPreference("access_token", access_token);
+
+                //need to write function to fetch data with access token
+
+                //move to phone picker activity
+                Intent phoneIntent = new Intent(this, contactPickerActivity.class);
+                startActivity(phoneIntent);
 
             }
         }
     }
 
     //save to shared preferences
-    public void saveAccessToken(String key, String value)
+    public void saveSharedPreference(String key, String value)
     {
         SharedPreferences sharedPref = getApplication().getSharedPreferences("mcProject", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
