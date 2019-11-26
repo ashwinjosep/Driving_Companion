@@ -23,8 +23,12 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.fitbit_api_test.ResolverActivity;
 import com.example.fitbit_api_test.models.Contract;
+import com.example.fitbit_api_test.models.LocationObject;
 import com.example.fitbit_api_test.models.RequestObject;
+import com.example.fitbit_api_test.models.ResponseObject;
+import com.example.fitbit_api_test.models.RetrofitEndPoints;
 import com.example.fitbit_api_test.utils.PrefsHelper;
+import com.example.fitbit_api_test.utils.RetrofitClientInstance;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -35,6 +39,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.example.fitbit_api_test.ResolverActivity.CONN_STATUS_KEY;
 
@@ -336,11 +346,12 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
                 batteryStatusObject.put("chargingStatus",cursor.getString(COL_LOCATION_CHARGING_STATUS));
                 locationRequestObject.put("location",locationObject);
                 locationRequestObject.put("batteryStatus",batteryStatusObject);
-                RequestObject request= new RequestObject();
+                final RequestObject request= new RequestObject();
                 request.setTimestampOfCurrentProcessing(timeStampForFirstLocation);
                 request.setLocationObject(locationRequestObject);
-                SubmitLocations submitLocations = new SubmitLocations();
-                submitLocations.execute(request);
+
+                sendLocation(request);
+
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e(TAG, "JSON Exception in building ticker array");
@@ -349,95 +360,157 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
         }
     }
 
-    public class SubmitLocations extends AsyncTask<RequestObject, Void, Integer> {
-
-        @Override
-        protected void onPreExecute() {
-            new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(true);
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Integer doInBackground(RequestObject... params) {
-
-            try {
-                RequestObject request = params[0];
-                HttpResponse response = NetworkUtils.makePostRequest(NetworkUtils.URL, request.getLocationObject().toString());
-                if (response != null && response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                    if(firstServerUpdate)
-                        firstServerUpdate=false;
-                    return request.getTimestampOfCurrentProcessing();
-                }else if(response!=null){
-                    Log.e(TAG,"Error:"+response.getStatusLine().getStatusCode());
-                    cancel(true);
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-                Log.e(TAG,e.toString());
-                cancel(true);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Integer time) {
-            super.onPostExecute(time);
-            if(time!=null) {
-                try {
-                    getContentResolver().delete(Contract.LocationDataEntry.CONTENT_URI,
-                            Contract.LocationDataEntry.COLUMN_LOCATION_DATA_TIMESTAMP + " = " + time,
-                            null);
-                    Cursor cursor = getContentResolver().query(Contract.LocationDataEntry.CONTENT_URI,
-                            LOCATION_DATA_PROJECTION,
-                            null,
-                            null,
-                            Contract.LocationDataEntry.COLUMN_LOCATION_DATA_TIMESTAMP+" DESC"
-                    );
-                    if (cursor != null && cursor.moveToFirst()) {
-                        JSONObject locationObject = new JSONObject();
-                        JSONObject batteryStatusObject = new JSONObject();
-                        JSONObject locationRequestObject = new JSONObject();
-                        locationObject.put("lat",cursor.getDouble(COL_LOCATION_LATITUDE));
-                        locationObject.put("lng",cursor.getDouble(COL_LOCATION_LONGITUDE));
-                        locationObject.put("timestamp",cursor.getInt(COL_LOCATION_TIMESTAMP));
-                        int timeStampForFirstLocation = cursor.getInt(COL_LOCATION_TIMESTAMP);
-                        if(cursor.getString(COL_LOCATION_PROVIDER)!=null&&!"null".equals(cursor.getString(COL_LOCATION_PROVIDER)))
-                            locationObject.put("provider",cursor.getString(COL_LOCATION_PROVIDER));
-                        if(cursor.getString(COL_LOCATION_ACCURACY)!=null&&!"null".equals(cursor.getString(COL_LOCATION_ACCURACY)))
-                            locationObject.put("accuracy",cursor.getFloat(COL_LOCATION_ACCURACY));
-                        if(cursor.getString(COL_LOCATION_SPEED)!=null&&!"null".equals(cursor.getString(COL_LOCATION_SPEED)))
-                            locationObject.put("speed",cursor.getFloat(COL_LOCATION_SPEED));
-                        locationObject.put("gpsEnabled",(PrefsHelper.GPS_ENABLED.equals(cursor.getString(COL_LOCATION_GPS_ENABLED))));
-                        batteryStatusObject.put("timestamp",cursor.getInt(COL_LOCATION_BATTERY_STATUS_TIME));
-                        batteryStatusObject.put("charge",cursor.getInt(COL_LOCATION_BATTERY_STATUS_REMAINING_TIME));
-                        batteryStatusObject.put("chargingStatus",cursor.getString(COL_LOCATION_CHARGING_STATUS));
-                        locationRequestObject.put("location",locationObject);
-                        locationRequestObject.put("batteryStatus",batteryStatusObject);
-                        RequestObject request= new RequestObject();
-                        request.setTimestampOfCurrentProcessing(timeStampForFirstLocation);
-                        request.setLocationObject(locationRequestObject);
-                        SubmitLocations submitLocations = new SubmitLocations();
-                        submitLocations.execute(request);
-                        cursor.close();
-                    }else{
+    public void sendLocation(final RequestObject request){
+        RetrofitEndPoints service = RetrofitClientInstance.getRetrofitInstance().create(RetrofitEndPoints.class);
+        service.sendLocation(request).enqueue(new Callback<ResponseObject>() {
+            @Override
+            public void onResponse(Call<ResponseObject> call, Response<ResponseObject> response) {
+                if(request.getTimestampOfCurrentProcessing()!=0) {
+                    try {
+                        getContentResolver().delete(Contract.LocationDataEntry.CONTENT_URI,
+                                Contract.LocationDataEntry.COLUMN_LOCATION_DATA_TIMESTAMP + " = " + String.valueOf(request.getTimestampOfCurrentProcessing()!=0),
+                                null);
+                        Cursor cursor = getContentResolver().query(Contract.LocationDataEntry.CONTENT_URI,
+                                LOCATION_DATA_PROJECTION,
+                                null,
+                                null,
+                                Contract.LocationDataEntry.COLUMN_LOCATION_DATA_TIMESTAMP+" DESC"
+                        );
+                        if (cursor != null && cursor.moveToFirst()) {
+                            JSONObject locationObject = new JSONObject();
+                            JSONObject batteryStatusObject = new JSONObject();
+                            JSONObject locationRequestObject = new JSONObject();
+                            locationObject.put("lat",cursor.getDouble(COL_LOCATION_LATITUDE));
+                            locationObject.put("lng",cursor.getDouble(COL_LOCATION_LONGITUDE));
+                            locationObject.put("timestamp",cursor.getInt(COL_LOCATION_TIMESTAMP));
+                            int timeStampForFirstLocation = cursor.getInt(COL_LOCATION_TIMESTAMP);
+                            if(cursor.getString(COL_LOCATION_PROVIDER)!=null&&!"null".equals(cursor.getString(COL_LOCATION_PROVIDER)))
+                                locationObject.put("provider",cursor.getString(COL_LOCATION_PROVIDER));
+                            if(cursor.getString(COL_LOCATION_ACCURACY)!=null&&!"null".equals(cursor.getString(COL_LOCATION_ACCURACY)))
+                                locationObject.put("accuracy",cursor.getFloat(COL_LOCATION_ACCURACY));
+                            if(cursor.getString(COL_LOCATION_SPEED)!=null&&!"null".equals(cursor.getString(COL_LOCATION_SPEED)))
+                                locationObject.put("speed",cursor.getFloat(COL_LOCATION_SPEED));
+                            locationObject.put("gpsEnabled",(PrefsHelper.GPS_ENABLED.equals(cursor.getString(COL_LOCATION_GPS_ENABLED))));
+                            batteryStatusObject.put("timestamp",cursor.getInt(COL_LOCATION_BATTERY_STATUS_TIME));
+                            batteryStatusObject.put("charge",cursor.getInt(COL_LOCATION_BATTERY_STATUS_REMAINING_TIME));
+                            batteryStatusObject.put("chargingStatus",cursor.getString(COL_LOCATION_CHARGING_STATUS));
+                            locationRequestObject.put("location",locationObject);
+                            locationRequestObject.put("batteryStatus",batteryStatusObject);
+                            RequestObject request= new RequestObject();
+                            request.setTimestampOfCurrentProcessing(timeStampForFirstLocation);
+                            request.setLocationObject(locationRequestObject);
+                            sendLocation(request);
+                            cursor.close();
+                        }else{
+                            new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(false);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e(TAG, e.toString());
                         new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(false);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e(TAG, e.toString());
+                }else{
                     new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(false);
                 }
-            }else{
+            }
+
+            @Override
+            public void onFailure(Call<ResponseObject> call, Throwable t) {
                 new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(false);
             }
-        }
-
-        @Override
-        protected void onCancelled(Integer status) {
-            super.onCancelled(status);
-            new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(false);
-        }
+        });
     }
+
+//
+//    public class SubmitLocations extends AsyncTask<RequestObject, Void, Integer> {
+//
+//        @Override
+//        protected void onPreExecute() {
+//            new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(true);
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected Integer doInBackground(RequestObject... params) {
+//
+//            try {
+//                RequestObject request = params[0];
+//                HttpResponse response = NetworkUtils.makePostRequest(NetworkUtils.URL, request.getLocationObject().toString());
+//                if (response != null && response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+//                    if(firstServerUpdate)
+//                        firstServerUpdate=false;
+//                    return request.getTimestampOfCurrentProcessing();
+//                }else if(response!=null){
+//                    Log.e(TAG,"Error:"+response.getStatusLine().getStatusCode());
+//                    cancel(true);
+//                }
+//            }catch (Exception e){
+//                e.printStackTrace();
+//                Log.e(TAG,e.toString());
+//                cancel(true);
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Integer time) {
+//            super.onPostExecute(time);
+//            if(time!=null) {
+//                try {
+//                    getContentResolver().delete(Contract.LocationDataEntry.CONTENT_URI,
+//                            Contract.LocationDataEntry.COLUMN_LOCATION_DATA_TIMESTAMP + " = " + time,
+//                            null);
+//                    Cursor cursor = getContentResolver().query(Contract.LocationDataEntry.CONTENT_URI,
+//                            LOCATION_DATA_PROJECTION,
+//                            null,
+//                            null,
+//                            Contract.LocationDataEntry.COLUMN_LOCATION_DATA_TIMESTAMP+" DESC"
+//                    );
+//                    if (cursor != null && cursor.moveToFirst()) {
+//                        JSONObject locationObject = new JSONObject();
+//                        JSONObject batteryStatusObject = new JSONObject();
+//                        JSONObject locationRequestObject = new JSONObject();
+//                        locationObject.put("lat",cursor.getDouble(COL_LOCATION_LATITUDE));
+//                        locationObject.put("lng",cursor.getDouble(COL_LOCATION_LONGITUDE));
+//                        locationObject.put("timestamp",cursor.getInt(COL_LOCATION_TIMESTAMP));
+//                        int timeStampForFirstLocation = cursor.getInt(COL_LOCATION_TIMESTAMP);
+//                        if(cursor.getString(COL_LOCATION_PROVIDER)!=null&&!"null".equals(cursor.getString(COL_LOCATION_PROVIDER)))
+//                            locationObject.put("provider",cursor.getString(COL_LOCATION_PROVIDER));
+//                        if(cursor.getString(COL_LOCATION_ACCURACY)!=null&&!"null".equals(cursor.getString(COL_LOCATION_ACCURACY)))
+//                            locationObject.put("accuracy",cursor.getFloat(COL_LOCATION_ACCURACY));
+//                        if(cursor.getString(COL_LOCATION_SPEED)!=null&&!"null".equals(cursor.getString(COL_LOCATION_SPEED)))
+//                            locationObject.put("speed",cursor.getFloat(COL_LOCATION_SPEED));
+//                        locationObject.put("gpsEnabled",(PrefsHelper.GPS_ENABLED.equals(cursor.getString(COL_LOCATION_GPS_ENABLED))));
+//                        batteryStatusObject.put("timestamp",cursor.getInt(COL_LOCATION_BATTERY_STATUS_TIME));
+//                        batteryStatusObject.put("charge",cursor.getInt(COL_LOCATION_BATTERY_STATUS_REMAINING_TIME));
+//                        batteryStatusObject.put("chargingStatus",cursor.getString(COL_LOCATION_CHARGING_STATUS));
+//                        locationRequestObject.put("location",locationObject);
+//                        locationRequestObject.put("batteryStatus",batteryStatusObject);
+//                        RequestObject request= new RequestObject();
+//                        request.setTimestampOfCurrentProcessing(timeStampForFirstLocation);
+//                        request.setLocationObject(locationRequestObject);
+//                        SubmitLocations submitLocations = new SubmitLocations();
+//                        submitLocations.execute(request);
+//                        cursor.close();
+//                    }else{
+//                        new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(false);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Log.e(TAG, e.toString());
+//                    new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(false);
+//                }
+//            }else{
+//                new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(false);
+//            }
+//        }
+//
+//        @Override
+//        protected void onCancelled(Integer status) {
+//            super.onCancelled(status);
+//            new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(false);
+//        }
+//    }
 
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(

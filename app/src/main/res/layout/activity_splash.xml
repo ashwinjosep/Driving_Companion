@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_splash"
     android:layout_width="match_parent"
@@ -8,25 +8,41 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#c5523f"
+    android:orientation="vertical"
+    android:background="#004B8D"
+    android:layout_gravity="center"
+    android:gravity="center"
     tools:context="com.example.fitbit_api_test.SplashActivity">
 
-    <ImageView
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/splash_image"
-        android:contentDescription="Splash Image"
-        android:layout_centerInParent="true"/>
+        android:id="@+id/welcome_text"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="30dp"
+        android:text="Welcome to"
+        android:textColor="@color/text_colour_white"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textStyle="bold"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/splash_image"
-        android:text="Welcome to Location Tracker"
-        android:textColor="@color/text_colour"
-        android:textSize="18dp"
+        android:text="Driving Companion"
+        android:textColor="@color/text_colour_white"
+        android:textSize="40sp"
+        android:gravity="center"
         android:textStyle="bold"
-        android:layout_marginTop="40dp"
-        android:layout_centerInParent="true"/>
+        android:id="@+id/driving_comapnion_text"
+        android:layout_marginTop="10dp"/>
 
-</RelativeLayout>
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:id="@+id/splash_image"
+        android:src="@drawable/gears"/>
+
+</LinearLayout>

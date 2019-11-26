@@ -4,7 +4,8 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="text_colour">#000000</color>
+    <color name="text_colour">#051105</color>
+    <color name="text_colour_white">#ffffff</color>
 
     <color name="snackbar_teel">#1DA1F3</color>
     <color name="snackbar_yellow">#ffffff00</color>
