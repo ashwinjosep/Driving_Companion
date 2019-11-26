@@ -18,11 +18,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
         TextView textViewPlaceName;
         TextView textViewPlaceRating;
+        TextView textViewPlaceVicinity;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             this.textViewPlaceName = (TextView) itemView.findViewById(R.id.placeNameTextView);
             this.textViewPlaceRating = (TextView) itemView.findViewById(R.id.placeRatingTextView);
+            this.textViewPlaceVicinity = (TextView) itemView.findViewById(R.id.placeVicinityTextView);
         }
     }
 
@@ -43,9 +45,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public void onBindViewHolder(@NonNull CustomAdapter.MyViewHolder holder, int position) {
         TextView textViewPlaceName = holder.textViewPlaceName;
         TextView textViewPlaceRating = holder.textViewPlaceRating;
+        TextView textViewPlaceVicinity = holder.textViewPlaceVicinity;
 
         textViewPlaceName.setText(dataSet.get(position).getName());
         textViewPlaceRating.setText(dataSet.get(position).getRating());
+        textViewPlaceVicinity.setText(dataSet.get(position).getVicinity());
     }
 
     @Override
