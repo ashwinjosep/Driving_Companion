@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 String access_token = fragments[1];
                 saveSharedPreference("access_token", access_token);
                 //move to phone picker activity
-                Intent phoneIntent = new Intent(this, contactPickerActivity.class);
+                Intent phoneIntent = new Intent(this, coffeeSuggestionsActivity.class);
                 startActivity(phoneIntent);
             }
         }
