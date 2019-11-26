@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".coffeeSuggestionsActivity"></activity>
+        <activity android:name=".trackingActivity"></activity>
+        <activity android:name=".coffeeSuggestionsActivity" />
         <activity android:name=".contactPickerActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -46,6 +47,10 @@
                     android:scheme="example" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

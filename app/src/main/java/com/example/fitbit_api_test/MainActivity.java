@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Clicked on login button", Toast.LENGTH_SHORT).show();
                 performAuthorization();
+                //read intra day heart rate
                 getData fitbitObject = new getData();
                 fitbitObject.execute();
             }
@@ -51,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
         Uri data = getIntent().getData();
         if(data!=null)
         {
-
-//            Log.d("data", String.valueOf(data));
             String fragment = data.getFragment();
             if(fragment!=null)
             {
@@ -60,16 +59,10 @@ public class MainActivity extends AppCompatActivity {
 
                 //get access token
                 String access_token = fragments[1];
-//                Log.d("access token", access_token);
-
                 saveSharedPreference("access_token", access_token);
-
-                //need to write function to fetch data with access token
-
                 //move to phone picker activity
                 Intent phoneIntent = new Intent(this, contactPickerActivity.class);
                 startActivity(phoneIntent);
-
             }
         }
     }
@@ -132,6 +125,12 @@ public class MainActivity extends AppCompatActivity {
                 br.close();
                 JsonObject jobj = new Gson().fromJson(sb.toString(), JsonObject.class);
                 Log.d("getHeartRate-Buffer Values", jobj.toString());
+
+                //need to write function to save values and test against model
+            }
+            else
+            {
+                Log.d("getHeartrate", "Connection error");
             }
         } catch (IOException e) {
             e.printStackTrace();

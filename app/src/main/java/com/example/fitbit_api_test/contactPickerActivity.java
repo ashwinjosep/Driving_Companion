@@ -42,9 +42,7 @@ public class contactPickerActivity extends AppCompatActivity {
         pickContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Clicked on contact button", Toast.LENGTH_SHORT).show();
-
-
+//                Toast.makeText(getApplicationContext(), "Clicked on contact button", Toast.LENGTH_SHORT).show();
                 Uri uri = Uri.parse("content://contacts");
                 Intent intent = new Intent(Intent.ACTION_PICK, uri);
                 intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
@@ -74,6 +72,7 @@ public class contactPickerActivity extends AppCompatActivity {
             }
         });
 
+        //beep button logic
         Button beepButton = findViewById(R.id.beepButton);
         beepButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,14 +82,26 @@ public class contactPickerActivity extends AppCompatActivity {
             }
         });
 
-        Button gotoSuggestionsButton = findViewById(R.id.gotoSuggestionsButton);
-        gotoSuggestionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent coffeeActviityIntent = new Intent(contactPickerActivity.this, coffeeSuggestionsActivity.class);
-                startActivity(coffeeActviityIntent);
-            }
-        });
+//        //coffee suggestion button logic
+//        Button gotoSuggestionsButton = findViewById(R.id.gotoSuggestionsButton);
+//        gotoSuggestionsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent coffeeActviityIntent = new Intent(contactPickerActivity.this, coffeeSuggestionsActivity.class);
+//                startActivity(coffeeActviityIntent);
+//            }
+//        });
+
+
+//        //tracking button logic
+//        Button gotoTrackingButton = findViewById(R.id.startTrackingButton);
+//        gotoTrackingButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent trackingIntent = new Intent(contactPickerActivity.this, trackingActivity.class);
+//                startActivity(trackingIntent);
+//            }
+//        });
     }
 
     //function to vibrate for specific time in milliseconds
