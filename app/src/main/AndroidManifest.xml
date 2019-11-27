@@ -9,6 +9,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <meta-data
+        android:name="preloaded_fonts"
+        android:resource="@array/preloaded_fonts" />
 
     <application
         android:allowBackup="true"
@@ -28,9 +34,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ResolverActivity" />
+        <activity android:name=".trackingActivity"/>
         <activity android:name=".coffeeSuggestionsActivity" />
-        <activity android:name=".contactPickerActivity" />
+        <activity android:name=".contactPickerActivity">
+        </activity>
+
+        <activity android:name=".ResolverActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter android:label="@string/filter_view_https_gizmos">
                 <action android:name="android.intent.action.VIEW" />
@@ -56,9 +65,10 @@
             </intent-filter>
         </activity>
 
+
         <provider
             android:name=".provider.LocationContentProvider"
-            android:authorities="sreekesh.com.locationtracker"
+            android:authorities="com.example.fitbit_api_test"
             android:exported="false" />
 
 
@@ -72,6 +82,7 @@
         <service
             android:name=".services.LocationPollingService"
             android:exported="true" />
+
 
     </application>
 

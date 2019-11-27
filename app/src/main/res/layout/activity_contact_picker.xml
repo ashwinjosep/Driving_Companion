@@ -2,75 +2,113 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="#ecf0f1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".contactPickerActivity">
 
     <TextView
         android:id="@+id/contactMessageTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="170dp"
-        android:layout_marginEnd="150dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/montserrat"
         android:text="No Emergency contact listed"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/contactNameTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/montserrat"
+                android:textAlignment="center"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/contactNumberTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="50dp"
+                android:fontFamily="@font/montserrat"
+                android:textAlignment="center"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/chooseContactButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="300dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="80dp"
+        android:background="@drawable/button_theme"
+        android:drawableLeft="@drawable/baseline_edit_24"
+        android:drawableTint="@color/colorTextLight"
+        android:fontFamily="@font/maven_pro_medium"
+        android:padding="10dp"
         android:text="Pick Contact"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/colorTextLight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contactMessageTextView" />
-
-    <TextView
-        android:id="@+id/contactNameTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="220dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="294dp"
-        android:textAlignment="center"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/chooseContactButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/contactNumberTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="280dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="294dp"
-        android:textAlignment="center"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/chooseContactButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <Button
         android:id="@+id/callButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_theme"
+        android:drawableLeft="@drawable/baseline_call_24"
+        android:fontFamily="@font/maven_pro_medium"
+        android:drawableTint="@color/colorTextLight"
+        android:padding="10dp"
         android:text="call"
+        android:textColor="@color/colorTextLight"
         app:layout_constraintBottom_toTopOf="@+id/beepButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,26 +118,18 @@
         android:id="@+id/beepButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="120dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="80dp"
+        android:padding="10dp"
+        android:drawableLeft="@drawable/baseline_notifications_active_24"
+        android:fontFamily="@font/maven_pro_medium"
+        android:drawableTint="@color/colorTextLight"
+        android:background="@drawable/button_theme"
         android:text="Beep"
+        android:textColor="@color/colorTextLight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/callButton" />
-
-    <Button
-        android:id="@+id/gotoSuggestionsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="288dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="102dp"
-        android:text="Get Coffee"
-        app:layout_constraintBottom_toTopOf="@+id/contactMessageTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
