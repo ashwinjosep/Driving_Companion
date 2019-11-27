@@ -38,26 +38,26 @@ import java.util.ArrayList;
 
 public class coffeeSuggestionsActivity extends AppCompatActivity {
 
+    private static ArrayList<places> placeList = new ArrayList<places>();
     static View.OnClickListener optionClickListener;
-    private ArrayList<places> placeList = new ArrayList<places>();
+    private static RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee_suggestions);
-        optionClickListener = new optionClickedListener(this);
 
+        optionClickListener = new optionClickedListener(this);
         try {
             getCurrentLocation();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.placeListRecyclerView);
+
+        recyclerView = (RecyclerView) findViewById(R.id.placeListRecyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
-
 
     }
 
@@ -152,7 +152,6 @@ public class coffeeSuggestionsActivity extends AppCompatActivity {
     private void fillLayoutOptions() {
 
         RecyclerView.Adapter adapter = new CustomAdapter(placeList);
-        RecyclerView recyclerView = findViewById(R.id.placeListRecyclerView);
         recyclerView.setAdapter(adapter);
     }
 
@@ -224,19 +223,18 @@ public class coffeeSuggestionsActivity extends AppCompatActivity {
         return value;
     }
 
-    private class optionClickedListener implements View.OnClickListener{
+    public class optionClickedListener implements View.OnClickListener{
 
         private final Context context;
 
         private optionClickedListener(Context contextValue){
 
-            context=contextValue;
+            this.context=contextValue;
         }
         @Override
         public void onClick(View v) {
 
             Toast.makeText(getApplicationContext(),"clicked option", Toast.LENGTH_SHORT).show();
-            RecyclerView recyclerView = findViewById(R.id.placeListRecyclerView);
             int selectedItem = recyclerView.getChildAdapterPosition(v);
             RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(selectedItem);
 
@@ -247,7 +245,7 @@ public class coffeeSuggestionsActivity extends AppCompatActivity {
 
             Log.d("clicked ", latitude);
             Log.d("clicked ", longitude);
-            Uri gmmIntentUri = Uri.parse(latitude+","+longitude);
+            Uri gmmIntentUri = Uri.parse("google.navigation:q="+latitude+","+longitude);
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
             mapIntent.setPackage("com.google.android.apps.maps");
             startActivity(mapIntent);
