@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,7 +22,6 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.fitbit_api_test.ResolverActivity;
 import com.example.fitbit_api_test.models.Contract;
-import com.example.fitbit_api_test.models.LocationObject;
 import com.example.fitbit_api_test.models.RequestObject;
 import com.example.fitbit_api_test.models.ResponseObject;
 import com.example.fitbit_api_test.models.RetrofitEndPoints;
@@ -35,12 +33,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,10 +76,6 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
     SharedPreferences preferences;
 
     GoogleApiClient mGoogleApiClient;
-    private static final int TIME_THRESHOLD = 10000;
-    private static final int TIME_THRESHOLD_FOR_PRECISION = 10000;
-    private static final int LOCATION_UPDATE_TIME = 5000;
-    private static final float LOCATION_THRESHOLD = 100;
     boolean firstServerUpdate = true;
     Location mLastLocation;
     LocationRequest mLocationRequest;
@@ -106,7 +96,7 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
         mLocationRequest = new LocationRequest();
         if (trackingStatus) {
             mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            mLocationRequest.setInterval(LOCATION_UPDATE_TIME);
+            mLocationRequest.setInterval(PrefsHelper.LOCATION_UPDATE_TIME);
             mLocationRequest.setFastestInterval(1000);
             startLocationUpdates();
         } else {
@@ -118,7 +108,7 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
         mLocationRequest = new LocationRequest();
         if (preferences.getBoolean(PrefsHelper.LOCATION_TRACK_STATUS, false)) {
             mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            mLocationRequest.setInterval(LOCATION_UPDATE_TIME);
+            mLocationRequest.setInterval(PrefsHelper.LOCATION_UPDATE_TIME);
             mLocationRequest.setFastestInterval(1000);
             startLocationUpdates();
         }
@@ -200,9 +190,9 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
 
         // Check whether the new location fix is newer or older
         long timeDelta = location.getTime() - currentBestLocation.getTime();
-        boolean isSignificantlyNewer = timeDelta > TIME_THRESHOLD;
-        boolean isSignificantlyOlder = timeDelta < -TIME_THRESHOLD;
-        boolean isNewerForMorePrecision = timeDelta > TIME_THRESHOLD_FOR_PRECISION;
+        boolean isSignificantlyNewer = timeDelta > PrefsHelper.TIME_THRESHOLD;
+        boolean isSignificantlyOlder = timeDelta < -PrefsHelper.TIME_THRESHOLD;
+        boolean isNewerForMorePrecision = timeDelta > PrefsHelper.TIME_THRESHOLD_FOR_PRECISION;
 
         // If it's been more than two minutes since the current location, location is updated
         //      OR
@@ -238,7 +228,7 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
             return true;
         }
         float dist = newLocation.distanceTo(mLastLocation);
-        return dist >= LOCATION_THRESHOLD;
+        return dist >= PrefsHelper.LOCATION_THRESHOLD;
     }
 
     @Override

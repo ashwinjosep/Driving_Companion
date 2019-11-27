@@ -10,7 +10,7 @@ public class PrefsHelper {
     public static final String ACCESS_TOKEN = "access_token";
     public static final String EMERGENCY_NAME = "name";
     public static final String EMERGENCY_NUMBER = "number";
-//    public static final String ACCESS_TOKEN = "access_token";
+    public static final String STARTED_DRIVING = "started_driving";
     public static final String PREF_NAME = "LocationPreferenceFile";
 
     //Constants
@@ -22,6 +22,17 @@ public class PrefsHelper {
     public static final String CHARGING = "CHARGING";
     public static final String NONE = "NONE";
     public static final String UNAVAILABLE = "UNAVAILABLE";
+
+    //Parameters for Activity Recognition
+    public static final String BROADCAST_DETECTED_ACTIVITY = "activity_intent";
+    public static final long DETECTION_INTERVAL_IN_MILLISECONDS = 30 * 1000;
+    public static final int CONFIDENCE = 70;
+
+    //Location Polling variables
+    public static final int TIME_THRESHOLD = 30000;
+    public static final int TIME_THRESHOLD_FOR_PRECISION = 20000;
+    public static final int LOCATION_UPDATE_TIME = 5000;
+    public static final float LOCATION_THRESHOLD = 100;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -79,4 +90,14 @@ public class PrefsHelper {
         editor.putString(EMERGENCY_NUMBER,"");
         editor.apply();
     }
+
+    public Boolean getStartedDriving(){
+        return pref.getBoolean(STARTED_DRIVING, false);
+    }
+
+    public void setStartedDriving(Boolean status){
+        editor.putBoolean(STARTED_DRIVING, status);
+        editor.apply();
+    }
+
 }

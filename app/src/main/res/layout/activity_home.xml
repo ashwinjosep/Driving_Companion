@@ -80,7 +80,7 @@
                         android:layout_height="210dp"
                         android:scaleType="centerInside"
                         android:id="@+id/activity_image"
-                        android:src="@drawable/idle1"
+                        android:src="@drawable/idle"
                         android:contentDescription="Activity GIF" />
 
                     <TextView
