@@ -196,9 +196,9 @@ public class ContactPickerActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(isInitialContact && prefsHelper.getEmergencyContactName() != null && prefsHelper.getEmergencyContactNumber()!=null){
-            Intent coffeeSuggestionsIntent = new Intent(this, CoffeeSuggestionsActivity.class);
-            coffeeSuggestionsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(coffeeSuggestionsIntent);
+            Intent homeIntent = new Intent(this, HomeActivity.class);
+            homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(homeIntent);
         } else {
             super.onBackPressed();
         }
