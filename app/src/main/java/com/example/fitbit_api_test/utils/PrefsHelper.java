@@ -54,7 +54,7 @@ public class PrefsHelper {
     }
 
     public String getAccessToken(){
-        return pref.getString(ACCESS_TOKEN,"");
+        return pref.getString(ACCESS_TOKEN,null);
     }
 
     public void setAccessToken(String status){
@@ -63,7 +63,7 @@ public class PrefsHelper {
     }
 
     public String getEmergencyContactName(){
-        return pref.getString(EMERGENCY_NAME,"");
+        return pref.getString(EMERGENCY_NAME,null);
     }
 
     public void setEmergencyContactName(String name){
@@ -72,7 +72,7 @@ public class PrefsHelper {
     }
 
     public String getEmergencyContactNumber(){
-        return pref.getString(EMERGENCY_NUMBER,"");
+        return pref.getString(EMERGENCY_NUMBER,null);
     }
 
     public void setEmergencyContactNumber(String number){

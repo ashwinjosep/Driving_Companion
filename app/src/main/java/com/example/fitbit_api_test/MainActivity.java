@@ -131,8 +131,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     String access_token = fragments[1];
                     prefsHelper.setAccessToken(access_token);
                     //move to phone picker activity
-                    Intent phoneIntent = new Intent(this, CoffeeSuggestionsActivity.class);
-                    startActivity(phoneIntent);
+                    if(prefsHelper.getEmergencyContactName()==null || prefsHelper.getEmergencyContactNumber() == null) {
+                        Intent coffeeSuggestionsIntent = new Intent(this, CoffeeSuggestionsActivity.class);
+                        coffeeSuggestionsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(coffeeSuggestionsIntent);
+                    } else {
+                        Intent contactsIntent = new Intent(this, ContactPickerActivity.class);
+                        contactsIntent.putExtra("initial_contact",true);
+                        startActivity(contactsIntent);
+                    }
                 }
             }
         }

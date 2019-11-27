@@ -27,6 +27,7 @@ public class ContactPickerActivity extends AppCompatActivity {
 
     final int REQUEST_CODE = 1;
     PrefsHelper prefsHelper;
+    Boolean isInitialContact = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,9 @@ public class ContactPickerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact_picker);
         prefsHelper = new PrefsHelper(this);
 
+        if(getIntent()!=null && getIntent().hasExtra("initial_contact")){
+            isInitialContact = getIntent().getBooleanExtra("initial_contact", false);
+        }
         //function to check if emergency contact has been set and change page content accordingly
         setPageContent();
 
@@ -186,7 +190,20 @@ public class ContactPickerActivity extends AppCompatActivity {
 
                 cursor.close();
                 setPageContent();
+                finish();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isInitialContact && prefsHelper.getEmergencyContactName() != null && prefsHelper.getEmergencyContactNumber()!=null){
+            Intent coffeeSuggestionsIntent = new Intent(this, CoffeeSuggestionsActivity.class);
+            coffeeSuggestionsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(coffeeSuggestionsIntent);
+        } else {
+            super.onBackPressed();
+        }
+
     }
 }
