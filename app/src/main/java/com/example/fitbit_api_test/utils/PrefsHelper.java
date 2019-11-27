@@ -67,7 +67,7 @@ public class PrefsHelper {
     }
 
     public void setEmergencyContactName(String name){
-        editor.putString(EMERGENCY_NAME,"");
+        editor.putString(EMERGENCY_NAME,name);
         editor.apply();
     }
 
@@ -76,7 +76,7 @@ public class PrefsHelper {
     }
 
     public void setEmergencyContactNumber(String number){
-        editor.putString(EMERGENCY_NUMBER,"");
+        editor.putString(EMERGENCY_NUMBER,number);
         editor.apply();
     }
 }

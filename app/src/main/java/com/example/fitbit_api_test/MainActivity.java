@@ -22,8 +22,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.fitbit_api_test.services.LocationPollingService;
 import com.example.fitbit_api_test.utils.PrefsHelper;
 import com.google.android.gms.common.ConnectionResult;
@@ -71,6 +75,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_main);
 
         prefsHelper = new PrefsHelper(this);
+
+        //Settings Button Logic
+        ImageButton settingsButton = findViewById(R.id.settingsButton);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(settingsIntent);
+            }
+        });
+
+
+
+        ImageView loginPageImage = (ImageView) findViewById(R.id.login_page_gif);
+        GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(loginPageImage);
+        Glide.with(this).load(R.drawable.road_trip).into(imageViewTarget);
+
         //set on click for login button
         Button loginButton = findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {

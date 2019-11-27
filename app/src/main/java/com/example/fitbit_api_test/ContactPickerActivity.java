@@ -143,6 +143,9 @@ public class ContactPickerActivity extends AppCompatActivity {
         Button callButton = findViewById(R.id.callButton);
         TextView contactNameTextView = findViewById(R.id.contactNameTextView);
         TextView contactNumberTextView = findViewById(R.id.contactNumberTextView);
+        Log.d("setting page content", contact_name);
+        Log.d("setting page content", contact_number);
+
         if(contact_name!=null)
         {
             messageTextView.setText("Current Emergency Contact");
@@ -188,7 +191,7 @@ public class ContactPickerActivity extends AppCompatActivity {
 
                 cursor.close();
                 setPageContent();
-                finish();
+                //finish();
             }
         }
     }
