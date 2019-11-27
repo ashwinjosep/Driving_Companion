@@ -23,16 +23,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fitbit_api_test.utils.PrefsHelper;
+
 import org.w3c.dom.Text;
 
 public class contactPickerActivity extends AppCompatActivity {
 
     final int REQUEST_CODE = 1;
+    PrefsHelper prefsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_picker);
+        prefsHelper = new PrefsHelper(this);
 
         //function to check if emergency contact has been set and change page content accordingly
         setPageContent();
@@ -56,7 +60,7 @@ public class contactPickerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-                String phoneNumber = readSharedPreference("emergency_contact_number");
+                String phoneNumber = prefsHelper.getEmergencyContactNumber();
                 phoneIntent.setData(Uri.parse("tel:"+phoneNumber));
                 if (ActivityCompat.checkSelfPermission(contactPickerActivity.this,
                         Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -132,8 +136,8 @@ public class contactPickerActivity extends AppCompatActivity {
     public void setPageContent(){
 
         //check if emergency contacts have been set
-        String contact_name = readSharedPreference("emergency_contact_name");
-        String contact_number = readSharedPreference("emergency_contact_number");
+        String contact_name = prefsHelper.getEmergencyContactName();
+        String contact_number = prefsHelper.getEmergencyContactNumber();
         TextView messageTextView = findViewById(R.id.contactMessageTextView);
         Button pickContactButton = findViewById(R.id.chooseContactButton);
         Button callButton = findViewById(R.id.callButton);
@@ -181,29 +185,12 @@ public class contactPickerActivity extends AppCompatActivity {
 
                 Log.d("phone number", "Z number : " + number + " , name : " + name);
 
-                saveSharedPreference("emergency_contact_name", name);
-                saveSharedPreference("emergency_contact_number", number);
+                prefsHelper.setEmergencyContactName(name);
+                prefsHelper.setEmergencyContactNumber(number);
 
                 cursor.close();
                 setPageContent();
             }
         }
-    };
-
-    //save to shared preferences
-    public void saveSharedPreference(String key, String value)
-    {
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("mcProject", 0);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(key, value);
-        editor.apply();
     }
-
-    public String readSharedPreference(String key)
-    {
-        SharedPreferences sharedPref = this.getSharedPreferences("mcProject", Context.MODE_PRIVATE);
-        String value = sharedPref.getString(key, null);
-        return value;
-    }
-
 }

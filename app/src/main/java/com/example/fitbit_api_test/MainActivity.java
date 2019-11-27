@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                     //get access token
                     String access_token = fragments[1];
-                    saveSharedPreference("access_token", access_token);
+                    prefsHelper.setAccessToken(access_token);
                     //move to phone picker activity
                     Intent phoneIntent = new Intent(this, coffeeSuggestionsActivity.class);
                     startActivity(phoneIntent);
@@ -389,19 +389,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    public String readSharedPreference(String key)
-    {
-        SharedPreferences sharedPref = this.getSharedPreferences("mcProject", Context.MODE_PRIVATE);
-        String value = sharedPref.getString(key, null);
-        return value;
-    }
-
     public void getHeartRate() throws IOException {
         Log.d("getHeartRate", "inside get heart rate function");
 
         URL url = new URL("https://api.fitbit.com/1/user/-/activities/heart/date/today/1d.json");
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        String access_token = readSharedPreference("access_token");
+        String access_token = prefsHelper.getAccessToken();
         String bearerAuth = "Bearer "+access_token;
         urlConnection.setRequestProperty("Authorization", bearerAuth);
         urlConnection.setRequestMethod("GET");
@@ -431,15 +424,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         } finally {
             urlConnection.disconnect();
         }
-    }
-
-    //save to shared preferences
-    public void saveSharedPreference(String key, String value)
-    {
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("mcProject", 0);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(key, value);
-        editor.apply();
     }
 
     public void performAuthorization() {
