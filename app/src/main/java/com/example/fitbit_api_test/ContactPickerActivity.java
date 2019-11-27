@@ -160,8 +160,6 @@ public class ContactPickerActivity extends AppCompatActivity {
             contactNumberTextView.setText("");
             callButton.setVisibility(Button.INVISIBLE);
         }
-
-
     }
 
     @Override

@@ -54,7 +54,6 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         recyclerView = (RecyclerView) findViewById(R.id.placeListRecyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
