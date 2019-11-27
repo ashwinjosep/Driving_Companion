@@ -82,8 +82,8 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
     SharedPreferences preferences;
 
     GoogleApiClient mGoogleApiClient;
-    private static final int TIME_THRESHOLD = 120000;
-    private static final int TIME_THRESHOLD_FOR_PRECISION = 40000;
+    private static final int TIME_THRESHOLD = 10000;
+    private static final int TIME_THRESHOLD_FOR_PRECISION = 10000;
     private static final int LOCATION_UPDATE_TIME = 5000;
     private static final float LOCATION_THRESHOLD = 100;
     boolean firstServerUpdate = true;
@@ -137,6 +137,7 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
         new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(false);
         preferences= getSharedPreferences(PrefsHelper.PREF_NAME,0);
         preferences.registerOnSharedPreferenceChangeListener(this);
+        Log.e(TAG,"Inside Location Polling Service");
         super.onCreate();
     }
 
@@ -178,6 +179,7 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.e(TAG,"Location Updates Stoppeddddd");
         stopLocationUpdates();
     }
 
@@ -350,7 +352,9 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
                 request.setTimestampOfCurrentProcessing(timeStampForFirstLocation);
                 request.setLocationObject(locationRequestObject);
 
-                sendLocation(request);
+//                sendLocation(request);
+                Log.e(TAG,"Send Location CAlled");
+
 
             } catch (JSONException e) {
                 e.printStackTrace();

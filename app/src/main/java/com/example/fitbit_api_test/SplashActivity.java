@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity {
         ImageView splashImage = (ImageView) findViewById(R.id.splash_image);
         GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(splashImage);
         Glide.with(this).load(R.drawable.gears).into(imageViewTarget);
-
+        new PrefsHelper(this).setLocationTrackingStatus(true);
         if(new PrefsHelper(this).getLocationTrackingStatus()) {
             Intent locationSyncServiceIntent = new Intent(getApplicationContext(), LocationPollingService.class);
             startService(locationSyncServiceIntent);
