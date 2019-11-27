@@ -36,7 +36,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class coffeeSuggestionsActivity extends AppCompatActivity {
+public class CoffeeSuggestionsActivity extends AppCompatActivity {
 
     private static ArrayList<places> placeList = new ArrayList<places>();
     static View.OnClickListener optionClickListener;
@@ -113,7 +113,7 @@ public class coffeeSuggestionsActivity extends AppCompatActivity {
 
     public class getData extends AsyncTask<String, String, String>{
 
-        ProgressBar progressBar = new ProgressBar(coffeeSuggestionsActivity.this);
+        ProgressBar progressBar = new ProgressBar(CoffeeSuggestionsActivity.this);
         @Override
         protected void onPreExecute() {
             super.onPreExecute();

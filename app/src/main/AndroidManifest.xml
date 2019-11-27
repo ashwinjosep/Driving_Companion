@@ -35,8 +35,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".trackingActivity"/>
-        <activity android:name=".coffeeSuggestionsActivity" />
-        <activity android:name=".contactPickerActivity">
+        <activity android:name=".CoffeeSuggestionsActivity" />
+        <activity android:name=".ContactPickerActivity">
         </activity>
 
         <activity android:name=".ResolverActivity"/>

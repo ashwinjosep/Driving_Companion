@@ -6,7 +6,6 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.Ringtone;
@@ -21,13 +20,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.fitbit_api_test.utils.PrefsHelper;
 
-import org.w3c.dom.Text;
-
-public class contactPickerActivity extends AppCompatActivity {
+public class ContactPickerActivity extends AppCompatActivity {
 
     final int REQUEST_CODE = 1;
     PrefsHelper prefsHelper;
@@ -62,11 +58,11 @@ public class contactPickerActivity extends AppCompatActivity {
                 Intent phoneIntent = new Intent(Intent.ACTION_CALL);
                 String phoneNumber = prefsHelper.getEmergencyContactNumber();
                 phoneIntent.setData(Uri.parse("tel:"+phoneNumber));
-                if (ActivityCompat.checkSelfPermission(contactPickerActivity.this,
+                if (ActivityCompat.checkSelfPermission(ContactPickerActivity.this,
                         Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     Log.d("phone call button", "no permission");
                     final int REQUEST_PHONE_CALL = 1;
-                    ActivityCompat.requestPermissions(contactPickerActivity.this,
+                    ActivityCompat.requestPermissions(ContactPickerActivity.this,
                             new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL
                             );
                     return;
@@ -91,7 +87,7 @@ public class contactPickerActivity extends AppCompatActivity {
 //        gotoSuggestionsButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                Intent coffeeActviityIntent = new Intent(contactPickerActivity.this, coffeeSuggestionsActivity.class);
+//                Intent coffeeActviityIntent = new Intent(ContactPickerActivity.this, CoffeeSuggestionsActivity.class);
 //                startActivity(coffeeActviityIntent);
 //            }
 //        });
@@ -102,7 +98,7 @@ public class contactPickerActivity extends AppCompatActivity {
 //        gotoTrackingButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                Intent trackingIntent = new Intent(contactPickerActivity.this, trackingActivity.class);
+//                Intent trackingIntent = new Intent(ContactPickerActivity.this, trackingActivity.class);
 //                startActivity(trackingIntent);
 //            }
 //        });

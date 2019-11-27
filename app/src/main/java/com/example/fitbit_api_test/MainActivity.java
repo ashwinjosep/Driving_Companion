@@ -11,11 +11,9 @@ import androidx.fragment.app.DialogFragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -42,14 +40,11 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
 
 import okhttp3.HttpUrl;
 
@@ -136,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     String access_token = fragments[1];
                     prefsHelper.setAccessToken(access_token);
                     //move to phone picker activity
-                    Intent phoneIntent = new Intent(this, coffeeSuggestionsActivity.class);
+                    Intent phoneIntent = new Intent(this, CoffeeSuggestionsActivity.class);
                     startActivity(phoneIntent);
                 }
             }
