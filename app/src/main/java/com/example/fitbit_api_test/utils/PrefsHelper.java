@@ -122,6 +122,13 @@ public class PrefsHelper {
         editor.putString(LONGITUDE, longitude);
         editor.apply();
     }
-
-
+    public static void setSwitchValue(String key, Boolean value)
+    {
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+    public static boolean getSwitchValue(String key)
+    {
+        return pref.getBoolean(key, false);
+    }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -144,13 +145,30 @@ public class HomeActivity extends AppCompatActivity {
         Button callButton = findViewById(R.id.call_button);
         Button coffeeButton = findViewById(R.id.coffee_shops_button);
         Button settingsButton = findViewById(R.id.settings_button);
-        trackLocation = (Button) findViewById(R.id.start_location_tracking);
+        final Button trackLocation = findViewById(R.id.start_location_tracking);
 
         imageViewTarget = new GlideDrawableImageViewTarget(activityImage);
 
         trackLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //toggle logic
+                final String tagValue = (String) trackLocation.getTag();
+                if(tagValue.equals("0"))
+                {
+                    trackLocation.setText(R.string.stop_tracking);
+                    trackLocation.setTag("1");
+                    trackLocation.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_location_disabled_24, 0 ,0 , 0);
+                }
+                else
+                {
+                    trackLocation.setText(R.string.start_location_tracking);
+                    trackLocation.setTag("0");
+                    trackLocation.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_gps_fixed_24, 0 ,0 , 0);
+                }
+
+
                 if(!new PrefsHelper(HomeActivity.this).getLocationTrackingStatus()) {
                     startLocationTracking();
                 } else {

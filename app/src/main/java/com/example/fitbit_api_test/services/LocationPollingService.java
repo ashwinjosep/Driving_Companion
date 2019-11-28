@@ -234,7 +234,7 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
     @Override
     public void onLocationChanged(Location location) {
         if (isBetterLocation(location, mLastLocation)) {
-            Toast.makeText(getApplicationContext(),"Location Update from :"+location.getProvider()+" , Lat:"+location.getLatitude()+", Lng:"+location.getLongitude(),Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(),"Location Update from :"+location.getProvider()+" , Lat:"+location.getLatitude()+", Lng:"+location.getLongitude(),Toast.LENGTH_LONG).show();
             mLastLocation=location;
             location.getProvider();
             location.getTime();
