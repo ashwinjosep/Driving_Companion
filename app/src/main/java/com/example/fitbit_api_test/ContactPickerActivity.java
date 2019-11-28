@@ -86,26 +86,6 @@ public class ContactPickerActivity extends AppCompatActivity {
             }
         });
 
-//        //coffee suggestion button logic
-//        Button gotoSuggestionsButton = findViewById(R.id.gotoSuggestionsButton);
-//        gotoSuggestionsButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent coffeeActviityIntent = new Intent(ContactPickerActivity.this, CoffeeSuggestionsActivity.class);
-//                startActivity(coffeeActviityIntent);
-//            }
-//        });
-
-
-//        //tracking button logic
-//        Button gotoTrackingButton = findViewById(R.id.startTrackingButton);
-//        gotoTrackingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent trackingIntent = new Intent(ContactPickerActivity.this, trackingActivity.class);
-//                startActivity(trackingIntent);
-//            }
-//        });
     }
 
     //function to vibrate for specific time in milliseconds
@@ -143,8 +123,6 @@ public class ContactPickerActivity extends AppCompatActivity {
         Button callButton = findViewById(R.id.callButton);
         TextView contactNameTextView = findViewById(R.id.contactNameTextView);
         TextView contactNumberTextView = findViewById(R.id.contactNumberTextView);
-        Log.d("setting page content", contact_name);
-        Log.d("setting page content", contact_number);
 
         if(contact_name!=null)
         {

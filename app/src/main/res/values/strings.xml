@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">fitbit_api_test</string>
+    <string name="app_name">Driving Companion</string>
     <string name="filter_view_https_gizmos">https://www.example.com/gizmos</string>
     <string name="filter_view_example_gizmos">example://gizmos</string>
     <string name="enable_location_permission"><![CDATA[Please allow Location Tracker to access your location for seemless functioning.\\n\\nSettings -> Apps -> Driving Companion -> Permissions -> Enable Location]]></string>
-    <string name="start_location_tracking">START TRACKING MY LOCATION</string>
+    <string name="start_location_tracking">Start Tracking</string>
     <string name="driving_companion">Driving Companion</string>
 </resources>

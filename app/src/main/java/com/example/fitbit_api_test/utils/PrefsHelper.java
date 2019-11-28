@@ -12,6 +12,8 @@ public class PrefsHelper {
     public static final String EMERGENCY_NUMBER = "number";
     public static final String STARTED_DRIVING = "started_driving";
     public static final String PREF_NAME = "LocationPreferenceFile";
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
 
     //Constants
     public static final String GPS_ENABLED = "gps_enabled";
@@ -34,8 +36,8 @@ public class PrefsHelper {
     public static final int LOCATION_UPDATE_TIME = 5000;
     public static final float LOCATION_THRESHOLD = 100;
 
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
+    static SharedPreferences pref;
+    static SharedPreferences.Editor editor;
     Context context;
 
     int PRIVATE_MODE = 0;
@@ -99,5 +101,27 @@ public class PrefsHelper {
         editor.putBoolean(STARTED_DRIVING, status);
         editor.apply();
     }
+
+    public static String getLatitude()
+    {
+        return pref.getString(LATITUDE, null);
+    }
+
+    public static String getLongitude()
+    {
+        return pref.getString(LONGITUDE, null);
+    }
+
+    public static void setLatitude(String latitude)
+    {
+        editor.putString(LATITUDE, latitude);
+        editor.apply();
+    }
+    public static void setLongitude(String longitude)
+    {
+        editor.putString(LONGITUDE, longitude);
+        editor.apply();
+    }
+
 
 }

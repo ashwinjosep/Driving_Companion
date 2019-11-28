@@ -26,7 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HomeActivity"
+        <activity android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".SettingsActivity"></activity>
         <activity
@@ -38,11 +38,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".trackingActivity" />
         <activity android:name=".CoffeeSuggestionsActivity" />
         <activity android:name=".ContactPickerActivity"/>
         <activity android:name=".ResolverActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".HomeActivity">
             <intent-filter android:label="@string/filter_view_https_gizmos">
                 <action android:name="android.intent.action.VIEW" />
 

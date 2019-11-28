@@ -5,14 +5,8 @@
     android:id="@+id/activity_toggle_location_tracking"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgrnd"
+    android:background="#ecf0f1"
     tools:context=".HomeActivity">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/backgrnd"
-        android:scaleType="centerCrop"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,25 +18,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="30dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/bottom_nav">
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:minWidth="300dp"
-                android:paddingRight="10dp"
-                android:paddingEnd="10dp"
-                android:paddingLeft="10dp"
-                android:textColor="#ffffff"
-                android:paddingStart="10dp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:background="@drawable/button_background"
-                android:text="@string/start_location_tracking"
-                android:id="@+id/start_location_tracking"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
@@ -50,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="50dp"
+                android:layout_marginBottom="30dp"
                 android:layout_marginEnd="20dp"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -101,109 +81,182 @@
 
             </androidx.cardview.widget.CardView>
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:minWidth="300dp"
+                android:paddingRight="10dp"
+                android:paddingEnd="10dp"
+                android:paddingLeft="10dp"
+                android:textColor="#ffffff"
+                android:paddingStart="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/baseline_gps_fixed_24"
+                android:drawableTint="@color/colorTextLight"
+                android:background="@drawable/button_theme"
+                android:text="@string/start_location_tracking"
+                android:fontFamily="@font/maven_pro_medium"
+                android:id="@+id/start_location_tracking"/>
+
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/bottom_nav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/bottom_nav"
             android:layout_alignParentBottom="true"
+            android:gravity="center"
             android:orientation="horizontal"
             android:weightSum="3">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:gravity="center"
-                android:id="@+id/coffee_shops_button"
-                android:clickable="true"
-                android:layout_marginEnd="1dp"
-                android:layout_marginStart="1dp"
-                android:background="@drawable/button_background">
 
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/ic_coffee"
-                    android:padding="10dp"
-                    android:clickable="false"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Coffee Shops"
-                    android:textColor="@color/text_colour_white"
-                    android:textStyle="bold"
-                    android:clickable="false"
-                    android:textSize="14sp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:gravity="center"
+            <Button
                 android:id="@+id/call_button"
-                android:clickable="true"
-                android:background="@drawable/button_background">
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/ic_call"
-                    android:padding="10dp"
-                    android:clickable="false"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Trusted Contact"
-                    android:textColor="@color/text_colour_white"
-                    android:textStyle="bold"
-                    android:clickable="false"
-                    android:textSize="14sp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:id="@+id/settings_button"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/nav_button_theme"
+                android:drawableLeft="@drawable/baseline_call_24"
+                android:drawableTint="@color/colorPrimary"
+                android:fontFamily="@font/maven_pro_medium"
                 android:padding="10dp"
-                android:gravity="center"
-                android:clickable="true"
-                android:layout_marginEnd="1dp"
-                android:layout_marginStart="1dp"
-                android:background="@drawable/button_background">
+                android:text="call"
+                android:textColor="@color/colorPrimary" />
 
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/ic_settings"
-                    android:padding="10dp"
-                    android:clickable="false"
-                    />
+            <Button
+                android:id="@+id/coffee_shops_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/nav_button_theme"
+                android:drawableLeft="@drawable/baseline_local_cafe_24"
+                android:drawableTint="@color/colorPrimary"
+                android:fontFamily="@font/maven_pro_medium"
+                android:padding="10dp"
+                android:text="Coffee"
+                android:textColor="@color/colorPrimary" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Settings"
-                    android:textColor="@color/text_colour_white"
-                    android:textStyle="bold"
-                    android:clickable="false"
-                    android:textSize="14sp"/>
+            <Button
+                android:id="@+id/settings_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/nav_button_theme"
+                android:drawableLeft="@drawable/baseline_settings_24"
+                android:drawableTint="@color/colorPrimary"
+                android:fontFamily="@font/maven_pro_medium"
+                android:padding="10dp"
+                android:text="Settings"
+                android:textColor="@color/colorPrimary" />
 
-            </LinearLayout>
+
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:orientation="vertical"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:gravity="center"-->
+            <!--                android:id="@+id/coffee_shops_button"-->
+            <!--                android:clickable="true"-->
+            <!--                android:layout_marginEnd="1dp"-->
+            <!--                android:layout_marginStart="1dp"-->
+            <!--                android:fontFamily="@font/maven_pro_medium"-->
+            <!--                android:background="@drawable/button_background">-->
+
+            <!--                <ImageView-->
+            <!--                    android:layout_width="80dp"-->
+            <!--                    android:layout_height="80dp"-->
+            <!--                    android:src="@drawable/ic_coffee"-->
+            <!--                    android:padding="10dp"-->
+            <!--                    android:clickable="false"-->
+            <!--                    />-->
+
+            <!--                <TextView-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="Coffee Shops"-->
+            <!--                    android:fontFamily="@font/maven_pro_medium"-->
+            <!--                    android:textColor="@color/text_colour_white"-->
+            <!--                    android:clickable="false"-->
+            <!--                    android:textSize="14sp"/>-->
+
+            <!--            </LinearLayout>-->
+
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:orientation="vertical"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:gravity="center"-->
+            <!--                android:id="@+id/call_button"-->
+            <!--                android:clickable="true"-->
+            <!--                android:fontFamily="@font/maven_pro_medium"-->
+            <!--                android:background="@drawable/button_background">-->
+
+            <!--                <ImageView-->
+            <!--                    android:layout_width="80dp"-->
+            <!--                    android:layout_height="80dp"-->
+            <!--                    android:src="@drawable/ic_call"-->
+            <!--                    android:padding="10dp"-->
+            <!--                    android:clickable="false"-->
+            <!--                    />-->
+
+            <!--                <TextView-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="Trusted Contact"-->
+            <!--                    android:fontFamily="@font/maven_pro_medium"-->
+            <!--                    android:textColor="@color/text_colour_white"-->
+            <!--                    android:clickable="false"-->
+            <!--                    android:textSize="14sp"/>-->
+
+            <!--            </LinearLayout>-->
+
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:orientation="vertical"-->
+            <!--                android:id="@+id/settings_button"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:gravity="center"-->
+            <!--                android:clickable="true"-->
+            <!--                android:layout_marginEnd="1dp"-->
+            <!--                android:layout_marginStart="1dp"-->
+            <!--                android:fontFamily="@font/maven_pro_medium"-->
+            <!--                android:background="@drawable/button_background">-->
+
+            <!--                <ImageView-->
+            <!--                    android:layout_width="80dp"-->
+            <!--                    android:layout_height="80dp"-->
+            <!--                    android:src="@drawable/ic_settings"-->
+            <!--                    android:padding="10dp"-->
+            <!--                    android:clickable="false"-->
+            <!--                    />-->
+
+            <!--                <TextView-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:fontFamily="@font/maven_pro_medium"-->
+            <!--                    android:text="Settings"-->
+            <!--                    android:textColor="@color/text_colour_white"-->
+            <!--                    android:clickable="false"-->
+            <!--                    android:textSize="14sp"/>-->
+
+            <!--            </LinearLayout>-->
 
         </LinearLayout>
 

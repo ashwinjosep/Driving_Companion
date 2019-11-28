@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.fitbit_api_test.utils.PrefsHelper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -41,6 +42,7 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
     private static ArrayList<places> placeList = new ArrayList<places>();
     static View.OnClickListener optionClickListener;
     private static RecyclerView recyclerView;
+    ProgressBar progressBarMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,15 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_coffee_suggestions);
 
         optionClickListener = new optionClickedListener(this);
+
+        progressBarMain = new ProgressBar(CoffeeSuggestionsActivity.this);
+        ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.coffeeSuggestionLayout);
+
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.setMargins(200, 200, 200, 200);
+        layout.addView(progressBarMain, params);
+        progressBarMain.setVisibility(View.VISIBLE);
+
         try {
             getCurrentLocation();
         } catch (IOException e) {
@@ -63,66 +74,78 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
     public void getCurrentLocation() throws IOException {
         Log.d("getCurrentLocation", "inside get nearby coffee shops function");
 
-        //get current location
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        if ( ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+        String latitude = PrefsHelper.getLatitude();
+        String longitude = PrefsHelper.getLongitude();
 
-            ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION }, 99);
+        if(longitude!=null&&latitude!=null)
+        {
+            getData dataReadObject = new getData();
+            dataReadObject.execute();
         }
-        try {
-            if(lm!=null)
-            {
-                lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
-                        if(location!=null)
-                        {
-                            double longitude = location.getLongitude();
-                            double latitude = location.getLatitude();
+        else {
 
-                            Log.d("latitude", Double.toString(latitude));
-                            Log.d("longitude", Double.toString(longitude));
+            //get current location
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                            saveSharedPreference("latitude", Double.toString(latitude));
-                            saveSharedPreference("longitude", Double.toString(longitude));
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 99);
+            }
+            try {
+                if (lm != null) {
+                    lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+                        @Override
+                        public void onLocationChanged(Location location) {
+                            if (location != null) {
+                                double longitude = location.getLongitude();
+                                double latitude = location.getLatitude();
 
-                            getData dataReadObject = new getData();
-                            dataReadObject.execute();
+                                Log.d("latitude", Double.toString(latitude));
+                                Log.d("longitude", Double.toString(longitude));
+
+                                saveSharedPreference("latitude", Double.toString(latitude));
+                                saveSharedPreference("longitude", Double.toString(longitude));
+
+                                getData dataReadObject = new getData();
+                                dataReadObject.execute();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onProviderEnabled(String provider) {
+                        @Override
+                        public void onProviderEnabled(String provider) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onProviderDisabled(String provider) {
+                        @Override
+                        public void onProviderDisabled(String provider) {
 
-                    }
-            }, null);}
-        } catch ( SecurityException e ) { e.printStackTrace(); }
-        return;
+                        }
+                    }, null);
+                }
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
     }
 
     public class getData extends AsyncTask<String, String, String>{
 
-        ProgressBar progressBar = new ProgressBar(CoffeeSuggestionsActivity.this);
+//        ProgressBar progressBar = new ProgressBar(CoffeeSuggestionsActivity.this);
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.coffeeSuggestionLayout);
-
-            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            params.setMargins(200, 200, 200, 200);
-            layout.addView(progressBar, params);
-            progressBar.setVisibility(View.VISIBLE);
+//            ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.coffeeSuggestionLayout);
+//
+//            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            params.setMargins(200, 200, 200, 200);
+//            layout.addView(progressBar, params);
+//            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -140,9 +163,9 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if(progressBar.isShown())
+            if(progressBarMain.isShown())
             {
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBarMain.setVisibility(View.INVISIBLE);
             }
             fillLayoutOptions();
         }

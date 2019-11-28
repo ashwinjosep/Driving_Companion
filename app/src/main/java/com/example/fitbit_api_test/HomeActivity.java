@@ -141,9 +141,9 @@ public class HomeActivity extends AppCompatActivity {
     private void initClickListenersAndViews() {
         activityImage = (ImageView) findViewById(R.id.activity_image);
         activityText = (TextView) findViewById(R.id.activity_text);
-        callButton = (LinearLayout) findViewById(R.id.call_button);
-        coffeeButton = (LinearLayout) findViewById(R.id.coffee_shops_button);
-        settingsButton = (LinearLayout) findViewById(R.id.settings_button);
+        Button callButton = findViewById(R.id.call_button);
+        Button coffeeButton = findViewById(R.id.coffee_shops_button);
+        Button settingsButton = findViewById(R.id.settings_button);
         trackLocation = (Button) findViewById(R.id.start_location_tracking);
 
         imageViewTarget = new GlideDrawableImageViewTarget(activityImage);
@@ -179,8 +179,10 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                Toast.makeText(HomeActivity.this,"Settings Clicked", Toast.LENGTH_SHORT).show();
-                user_activity = (user_activity + 1) % 5;
-                resetGif();
+                Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(settingsIntent);
+//                user_activity = (user_activity + 1) % 5;
+//                resetGif();
             }
         });
     }

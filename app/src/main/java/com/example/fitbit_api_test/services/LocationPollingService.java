@@ -243,6 +243,9 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
             location.getAccuracy();
             location.getSpeed();
 
+            PrefsHelper.setLongitude(Double.toString(location.getLongitude()));
+            PrefsHelper.setLatitude(Double.toString(location.getLatitude()));
+
             //Check if gps is enabled
             LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
             boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);

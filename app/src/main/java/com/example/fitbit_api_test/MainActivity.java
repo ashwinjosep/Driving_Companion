@@ -76,18 +76,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         prefsHelper = new PrefsHelper(this);
 
-        //Settings Button Logic
-        ImageButton settingsButton = findViewById(R.id.settingsButton);
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(settingsIntent);
-            }
-        });
-
-
-
         ImageView loginPageImage = (ImageView) findViewById(R.id.login_page_gif);
         GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(loginPageImage);
         Glide.with(this).load(R.drawable.road_trip).into(imageViewTarget);
