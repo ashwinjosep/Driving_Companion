@@ -71,7 +71,7 @@ public class PrefsHelper {
     }
 
     public void setAccessToken(String status){
-        editor.putString(ACCESS_TOKEN,"");
+        editor.putString(ACCESS_TOKEN,null);
         editor.apply();
     }
 

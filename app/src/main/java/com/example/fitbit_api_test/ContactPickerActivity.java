@@ -1,6 +1,7 @@
 package com.example.fitbit_api_test;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -19,30 +20,44 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.fitbit_api_test.utils.PrefsHelper;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class ContactPickerActivity extends AppCompatActivity {
 
+    private static final String TAG = ContactPickerActivity.class.getSimpleName();
     final int REQUEST_CODE = 1;
     PrefsHelper prefsHelper;
     Boolean isInitialContact = false;
+    LinearLayout contactDetailsLayout;
+    RelativeLayout noContactLayout;
+    ConstraintLayout mainLayout;
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_picker);
         prefsHelper = new PrefsHelper(this);
+        setPageContent();
 
         if(getIntent()!=null && getIntent().hasExtra("initial_contact")){
             isInitialContact = getIntent().getBooleanExtra("initial_contact", false);
         }
         //function to check if emergency contact has been set and change page content accordingly
-        setPageContent();
 
         //set on click listener for contact picker
-        Button pickContactButton = findViewById(R.id.chooseContactButton);
+        Button pickContactButton = (Button)findViewById(R.id.chooseContactButton);
+
         pickContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,6 +138,9 @@ public class ContactPickerActivity extends AppCompatActivity {
         Button callButton = findViewById(R.id.callButton);
         TextView contactNameTextView = findViewById(R.id.contactNameTextView);
         TextView contactNumberTextView = findViewById(R.id.contactNumberTextView);
+        contactDetailsLayout = (LinearLayout)findViewById(R.id.contact_details_layout);
+        noContactLayout = (RelativeLayout) findViewById(R.id.no_contact_layout);
+        mainLayout = (ConstraintLayout) findViewById(R.id.contact_picker_main_layout);
 
         if(contact_name!=null)
         {
@@ -132,13 +150,17 @@ public class ContactPickerActivity extends AppCompatActivity {
             contactNumberTextView.setText(contact_number);
             callButton.setText("Call "+contact_name);
             callButton.setVisibility(Button.VISIBLE);
+            contactDetailsLayout.setVisibility(View.VISIBLE);
+            noContactLayout.setVisibility(View.GONE);
         }
         else
         {
-            messageTextView.setText("No Emergency Contact has been set");
+            messageTextView.setText("");
             pickContactButton.setText("Pick Contact");
             contactNameTextView.setText("");
             contactNumberTextView.setText("");
+            contactDetailsLayout.setVisibility(View.GONE);
+            noContactLayout.setVisibility(View.VISIBLE);
             callButton.setVisibility(Button.INVISIBLE);
         }
     }
@@ -154,22 +176,46 @@ public class ContactPickerActivity extends AppCompatActivity {
 
                 Cursor cursor = getContentResolver().query(uri, projection,
                         null, null, null);
-                cursor.moveToFirst();
 
-                int numberColumnIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                String number = cursor.getString(numberColumnIndex);
+                if(cursor != null) {
+                    cursor.moveToFirst();
 
-                int nameColumnIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-                String name = cursor.getString(nameColumnIndex);
+                    int numberColumnIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                    String number = cursor.getString(numberColumnIndex);
 
-                Log.d("phone number", "Z number : " + number + " , name : " + name);
+                    int nameColumnIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                    String name = cursor.getString(nameColumnIndex);
 
-                prefsHelper.setEmergencyContactName(name);
-                prefsHelper.setEmergencyContactNumber(number);
+                    Log.d("phone number", "Z number : " + number + " , name : " + name);
 
-                cursor.close();
-                setPageContent();
-                //finish();
+                    prefsHelper.setEmergencyContactName(name);
+                    prefsHelper.setEmergencyContactNumber(number);
+                    contactDetailsLayout.setVisibility(View.VISIBLE);
+                    noContactLayout.setVisibility(View.GONE);
+
+                    cursor.close();
+                    setPageContent();
+                    if(isInitialContact && prefsHelper.getEmergencyContactName() != null && prefsHelper.getEmergencyContactNumber()!=null) {
+                        Snackbar snackbar = Snackbar
+                                .make(mainLayout, "Contact Successfully Added", Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        try {
+                            ScheduledFuture<?> countdown = scheduler.schedule(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finish();
+                                }
+                            }, 3000, TimeUnit.MILLISECONDS);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Contact successfully added timer Exception:" + e.toString());
+                        }
+                    } else{
+                        Snackbar snackbar = Snackbar
+                                .make(mainLayout, "Contact Successfully Changed", Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                }
+
             }
         }
     }

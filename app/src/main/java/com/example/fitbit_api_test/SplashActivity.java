@@ -46,7 +46,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(mapIntent);
                 }}, 5000, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
-            Log.e(TAG, "onMapReady Exception:" + e.toString());
+            Log.e(TAG, "Splash screen timer Exception:" + e.toString());
         }
     }
 }

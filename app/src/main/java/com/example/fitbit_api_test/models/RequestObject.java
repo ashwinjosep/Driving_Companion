@@ -4,7 +4,8 @@ import org.json.JSONObject;
 
 public class RequestObject {
     private int timestampOfCurrentProcessing;
-    private JSONObject locationObject;
+    private Double lat;
+    private Double lng;
 
     public int getTimestampOfCurrentProcessing() {
         return timestampOfCurrentProcessing;
@@ -14,11 +15,19 @@ public class RequestObject {
         this.timestampOfCurrentProcessing = timestampOfCurrentProcessing;
     }
 
-    public JSONObject getLocationObject() {
-        return locationObject;
+    public Double getLat() {
+        return lat;
     }
 
-    public void setLocationObject(JSONObject locationObject) {
-        this.locationObject = locationObject;
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 }
