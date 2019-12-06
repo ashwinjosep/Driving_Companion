@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
+        Log.e("MainActivity", "inside main");
+
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
@@ -125,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
         } else {
+
+            Log.e("else condition", "inside else");
             //get response from login if any
             Uri data = getIntent().getData();
             if(data!=null)
@@ -137,8 +141,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     //get access token
                     String access_token = fragments[1];
                     prefsHelper.setAccessToken(access_token);
+                    Log.d("access_key", access_token);
                     //move to phone picker activity
-                    if(prefsHelper.getEmergencyContactName()==null || prefsHelper.getEmergencyContactNumber() == null) {
+                    if(prefsHelper.getEmergencyContactName()!=null && prefsHelper.getEmergencyContactNumber() != null) {
                         Intent homeIntent = new Intent(this, HomeActivity.class);
                         homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(homeIntent);
@@ -150,6 +155,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 }
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("MainActivity", "inside resume");
+
     }
 
     private void cancelDialog() {
@@ -178,6 +190,32 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         Intent locationSyncServiceIntent = new Intent(getApplicationContext(), LocationPollingService.class);
                         startService(locationSyncServiceIntent);
                     }
+                    Log.e("inside onoermission result", "inside onactivity result");
+                    //get response from login if any
+                    Uri data = getIntent().getData();
+                    if(data!=null)
+                    {
+                        String fragment = data.getFragment();
+                        if(fragment!=null)
+                        {
+                            String[] fragments = fragment.split("&")[0].split("=");
+
+                            //get access token
+                            String access_token = fragments[1];
+                            prefsHelper.setAccessToken(access_token);
+                            Log.d("access_key", access_token);
+                            //move to phone picker activity
+                            if(prefsHelper.getEmergencyContactName()==null || prefsHelper.getEmergencyContactNumber() == null) {
+                                Intent homeIntent = new Intent(this, HomeActivity.class);
+                                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(homeIntent);
+                            } else {
+                                Intent contactsIntent = new Intent(this, ContactPickerActivity.class);
+                                contactsIntent.putExtra("initial_contact",true);
+                                startActivity(contactsIntent);
+                            }
+                        }
+                    }
                 }else{
                     AlertDialog.Builder details_builder = new AlertDialog.Builder(MainActivity.this);
                     LayoutInflater details_inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -201,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        Log.e("request code", Integer.toString(requestCode));
         switch (requestCode) {
             case REQUEST_CHECK_SETTINGS:
                 switch (resultCode) {
@@ -386,7 +425,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .build();
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(String.valueOf(authorizeUrl.url())));
-        startActivityForResult(i, 101);
-
+        startActivityForResult(i, 10101);
     }
 }
