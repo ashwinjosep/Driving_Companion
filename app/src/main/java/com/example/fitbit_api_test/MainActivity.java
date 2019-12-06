@@ -85,11 +85,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Clicked on login button", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Clicked on login button", Toast.LENGTH_SHORT).show();
                 performAuthorization();
                 //read intra day heart rate
-                getData fitbitObject = new getData();
-                fitbitObject.execute();
             }
         });
 
@@ -372,70 +370,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    public class getData extends AsyncTask<String, String, String>
-    {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Log.d("getHeartRate", "get request completed");
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            Log.d("getHeartRate", "get request in progress");
-            try {
-                getHeartRate();
-                return "done";
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Log.d("getHeartRate", "get request completed");
-        }
-    }
-
-    public void getHeartRate() throws IOException {
-        Log.d("getHeartRate", "inside get heart rate function");
-
-        URL url = new URL("https://api.fitbit.com/1/user/-/activities/heart/date/today/1d.json");
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        String access_token = prefsHelper.getAccessToken();
-        String bearerAuth = "Bearer "+access_token;
-        urlConnection.setRequestProperty("Authorization", bearerAuth);
-        urlConnection.setRequestMethod("GET");
-        urlConnection.connect();
-        try {
-            int status = urlConnection.getResponseCode();
-            if(status==200)
-            {
-                BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line+"\n");
-                }
-                br.close();
-                JsonObject jobj = new Gson().fromJson(sb.toString(), JsonObject.class);
-                Log.d("getHeartRate-Buffer Values", jobj.toString());
-
-                //need to write function to save values and test against model
-            }
-            else
-            {
-                Log.d("getHeartrate", "Connection error");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            urlConnection.disconnect();
-        }
-    }
 
     public void performAuthorization() {
 

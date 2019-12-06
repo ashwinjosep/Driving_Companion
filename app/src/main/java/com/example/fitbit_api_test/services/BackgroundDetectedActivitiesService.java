@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -64,20 +65,22 @@ public class BackgroundDetectedActivitiesService extends Service {
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void result) {
-                Toast.makeText(getApplicationContext(),
-                        "Successfully requested activity updates",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                Log.d("activity updates", "Successfully requested activity updates");
+//                Toast.makeText(getApplicationContext(),
+//                        "Successfully requested activity updates",
+//                        Toast.LENGTH_SHORT)
+//                        .show();
             }
         });
 
         task.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(),
-                        "Requesting activity updates failed to start",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                Log.d("activity updates", "Requesting activity updates failed to start");
+//                Toast.makeText(getApplicationContext(),
+//                        "Requesting activity updates failed to start",
+//                        Toast.LENGTH_SHORT)
+//                        .show();
             }
         });
     }
@@ -88,18 +91,20 @@ public class BackgroundDetectedActivitiesService extends Service {
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void result) {
-                Toast.makeText(getApplicationContext(),
-                        "Removed activity updates successfully!",
-                        Toast.LENGTH_SHORT)
-                        .show();
+//                Toast.makeText(getApplicationContext(),
+//                        "Removed activity updates successfully!",
+//                        Toast.LENGTH_SHORT)
+//                        .show();
+                Log.d("backgroundActivitiesDetected", "Removed activity updates successfully!");
             }
         });
 
         task.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Failed to remove activity updates!",
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Failed to remove activity updates!",
+//                        Toast.LENGTH_SHORT).show();
+                Log.d("backgroundActivitiesDetected", "Failed to remove activity updates!");
             }
         });
     }

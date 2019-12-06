@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.fitbit_api_test.models.places;
 import com.example.fitbit_api_test.utils.PrefsHelper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -79,6 +79,8 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
 
         if(longitude!=null&&latitude!=null)
         {
+            Log.d("longitude", longitude);
+            Log.d("latitude", latitude);
             getData dataReadObject = new getData();
             dataReadObject.execute();
         }
@@ -102,9 +104,8 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
                                 Log.d("latitude", Double.toString(latitude));
                                 Log.d("longitude", Double.toString(longitude));
 
-                                saveSharedPreference("latitude", Double.toString(latitude));
-                                saveSharedPreference("longitude", Double.toString(longitude));
-
+                                PrefsHelper.setLatitude(Double.toString(latitude));
+                                PrefsHelper.setLatitude(Double.toString(longitude));
                                 getData dataReadObject = new getData();
                                 dataReadObject.execute();
                             }
@@ -181,8 +182,8 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
     private void getNearbyCoffeeShops() throws IOException {
 
         //get latitude and longitude values
-        String latitude = readSharedPreference("latitude");
-        String longitude = readSharedPreference("longitude");
+        String latitude = PrefsHelper.getLatitude();
+        String longitude = PrefsHelper.getLongitude();
 
         //build url
         final String maps_key = "AIzaSyDfXc0yfnSriPI2m_eygoPTLHm_sZUaaI4";
@@ -229,21 +230,6 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
         }
     }
 
-    //save to shared preferences
-    public void saveSharedPreference(String key, String value)
-    {
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("mcProject", 0);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
-
-    public String readSharedPreference(String key)
-    {
-        SharedPreferences sharedPref = this.getSharedPreferences("mcProject", Context.MODE_PRIVATE);
-        String value = sharedPref.getString(key, null);
-        return value;
-    }
 
     public class optionClickedListener implements View.OnClickListener{
 
@@ -271,7 +257,6 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
             mapIntent.setPackage("com.google.android.apps.maps");
             startActivity(mapIntent);
-
 
         }
     }
