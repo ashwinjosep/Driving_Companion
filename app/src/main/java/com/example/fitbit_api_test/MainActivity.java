@@ -113,13 +113,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     });
                     dialog = details_builder.show();
                 }else{
-                    if(!prefsHelper.getLocationTrackingStatus()){
-                        prefsHelper.setLocationTrackingStatus(true);
-                        Intent locationSyncServiceIntent = new Intent(getApplicationContext(), LocationPollingService.class);
-                        startService(locationSyncServiceIntent);
-                    }else{
-                        prefsHelper.setLocationTrackingStatus(false);
-                    }
+                    Intent locationSyncServiceIntent = new Intent(getApplicationContext(), LocationPollingService.class);
+                    startService(locationSyncServiceIntent);
                 }
             } else {
                 ActivityCompat.requestPermissions(MainActivity.this,
@@ -178,13 +173,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 if (grantResults.length > 0 && (grantResults[0] == PackageManager.PERMISSION_GRANTED) && (grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                     if(mGoogleApiClient==null) {
                         enableLocationServices();
-                        if (!prefsHelper.getLocationTrackingStatus()) {
-                            prefsHelper.setLocationTrackingStatus(true);
-                            Intent locationSyncServiceIntent = new Intent(getApplicationContext(), LocationPollingService.class);
-                            startService(locationSyncServiceIntent);
-                        } else {
-                            prefsHelper.setLocationTrackingStatus(false);
-                        }
+                        Intent locationSyncServiceIntent = new Intent(getApplicationContext(), LocationPollingService.class);
+                        startService(locationSyncServiceIntent);
                     }
                     if(prefsHelper.getLocationTrackingStatus()) {
                         Intent locationSyncServiceIntent = new Intent(getApplicationContext(), LocationPollingService.class);

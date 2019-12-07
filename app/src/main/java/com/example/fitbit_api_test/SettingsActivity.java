@@ -6,10 +6,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Switch;
 
 import com.example.fitbit_api_test.utils.PrefsHelper;
+
+import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -17,6 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         loadSettingsValues();
 
@@ -95,5 +99,24 @@ public class SettingsActivity extends AppCompatActivity {
 
         final Switch isDrowsySwitch = findViewById(R.id.switch3);
         isDrowsySwitch.setChecked(PrefsHelper.getSwitchValue("drowsySwitch"));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    /**
+     * react to the user tapping the back/up icon in the action bar
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

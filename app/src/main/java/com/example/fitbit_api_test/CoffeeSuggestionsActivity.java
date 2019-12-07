@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -36,6 +37,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CoffeeSuggestionsActivity extends AppCompatActivity {
 
@@ -49,6 +51,7 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee_suggestions);
 
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         optionClickListener = new optionClickedListener(this);
 
         progressBarMain = new ProgressBar(CoffeeSuggestionsActivity.this);
@@ -259,5 +262,24 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
             startActivity(mapIntent);
 
         }
+    }
+
+    /**
+     * react to the user tapping the back/up icon in the action bar
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

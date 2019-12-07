@@ -18,6 +18,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import com.example.fitbit_api_test.utils.PrefsHelper;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -50,6 +52,7 @@ public class ContactPickerActivity extends AppCompatActivity {
         prefsHelper = new PrefsHelper(this);
         setPageContent();
 
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         if(getIntent()!=null && getIntent().hasExtra("initial_contact")){
             isInitialContact = getIntent().getBooleanExtra("initial_contact", false);
         }
@@ -215,8 +218,21 @@ public class ContactPickerActivity extends AppCompatActivity {
                         snackbar.show();
                     }
                 }
-
             }
+        }
+    }
+
+    /**
+     * react to the user tapping the back/up icon in the action bar
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -229,6 +245,5 @@ public class ContactPickerActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
-
     }
 }

@@ -33,6 +33,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -321,12 +322,12 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
         RetrofitEndPoints service = RetrofitClientInstance.getRetrofitInstance().create(RetrofitEndPoints.class);
         service.sendLocation(request.getLat(),request.getLng(), request.getTimestampOfCurrentProcessing()).enqueue(new Callback<ResponseObject>() {
             @Override
-            public void onResponse(Call<ResponseObject> call, Response<ResponseObject> response) {
+            public void onResponse(@NotNull Call<ResponseObject> call, @NotNull Response<ResponseObject> response) {
                 Log.e(TAG,"Location Successfully Updated");
                 if(request.getTimestampOfCurrentProcessing()!=0) {
                     try {
                         getContentResolver().delete(Contract.LocationDataEntry.CONTENT_URI,
-                                Contract.LocationDataEntry.COLUMN_LOCATION_DATA_TIMESTAMP + " = " + String.valueOf(request.getTimestampOfCurrentProcessing()!=0),
+                                Contract.LocationDataEntry.COLUMN_LOCATION_DATA_TIMESTAMP + " = " + request.getTimestampOfCurrentProcessing(),
                                 null);
                         Cursor cursor = getContentResolver().query(Contract.LocationDataEntry.CONTENT_URI,
                                 LOCATION_DATA_PROJECTION,
@@ -357,8 +358,8 @@ public class LocationPollingService extends Service implements GoogleApiClient.C
             }
 
             @Override
-            public void onFailure(Call<ResponseObject> call, Throwable t) {
-                Log.e(TAG,"Location Updation Failed");
+            public void onFailure(@NotNull Call<ResponseObject> call, @NotNull Throwable t) {
+                Log.e(TAG,"Location Updation Failed:"+t.getMessage());
                 new PrefsHelper(getApplicationContext()).setUpdatingLocationStatus(false);
             }
         });

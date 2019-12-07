@@ -15,12 +15,14 @@
         android:gravity="center_horizontal">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="30dp"
-            android:layout_alignParentTop="true"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:paddingTop="30dp"
             android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
             android:layout_above="@+id/bottom_nav">
 
             <androidx.cardview.widget.CardView
@@ -29,14 +31,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="50dp"
-                android:layout_marginBottom="30dp"
                 android:layout_marginEnd="20dp"
-                app:cardCornerRadius="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.495"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints">
+                app:cardCornerRadius="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -56,10 +52,11 @@
                         android:text="Your Current Activity"/>
 
                     <ImageView
-                        android:layout_width="280dp"
-                        android:layout_height="210dp"
+                        android:layout_width="240dp"
+                        android:layout_height="180dp"
                         android:scaleType="centerInside"
                         android:id="@+id/activity_image"
+                        android:layout_gravity="center"
                         android:src="@drawable/idle"
                         android:contentDescription="Activity GIF" />
 
@@ -81,27 +78,30 @@
 
             </androidx.cardview.widget.CardView>
 
-            <Button
-                android:id="@+id/start_location_tracking"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/button_theme"
-                    android:drawableLeft="@drawable/baseline_gps_fixed_24"
-                android:drawableTint="@color/colorTextLight"
-                android:fontFamily="@font/maven_pro_medium"
-                android:minWidth="300dp"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingEnd="10dp"
-                android:paddingRight="10dp"
-                android:tag="0"
-                android:text="@string/start_location_tracking"
-                android:textColor="#ffffff"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
         </LinearLayout>
+
+        <Button
+            android:id="@+id/start_location_tracking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_above="@+id/bottom_nav"
+            android:background="@drawable/button_theme"
+            android:drawableLeft="@drawable/baseline_gps_fixed_24"
+            android:drawableTint="@color/colorTextLight"
+            android:fontFamily="@font/maven_pro_medium"
+            android:minWidth="300dp"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:tag="0"
+            android:text="@string/start_location_tracking"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/bottom_nav"
@@ -160,104 +160,6 @@
                 android:padding="10dp"
                 android:text="Settings"
                 android:textColor="@color/colorPrimary" />
-
-
-            <!--            <LinearLayout-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_weight="1"-->
-            <!--                android:orientation="vertical"-->
-            <!--                android:padding="10dp"-->
-            <!--                android:gravity="center"-->
-            <!--                android:id="@+id/coffee_shops_button"-->
-            <!--                android:clickable="true"-->
-            <!--                android:layout_marginEnd="1dp"-->
-            <!--                android:layout_marginStart="1dp"-->
-            <!--                android:fontFamily="@font/maven_pro_medium"-->
-            <!--                android:background="@drawable/button_background">-->
-
-            <!--                <ImageView-->
-            <!--                    android:layout_width="80dp"-->
-            <!--                    android:layout_height="80dp"-->
-            <!--                    android:src="@drawable/ic_coffee"-->
-            <!--                    android:padding="10dp"-->
-            <!--                    android:clickable="false"-->
-            <!--                    />-->
-
-            <!--                <TextView-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:text="Coffee Shops"-->
-            <!--                    android:fontFamily="@font/maven_pro_medium"-->
-            <!--                    android:textColor="@color/text_colour_white"-->
-            <!--                    android:clickable="false"-->
-            <!--                    android:textSize="14sp"/>-->
-
-            <!--            </LinearLayout>-->
-
-            <!--            <LinearLayout-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_weight="1"-->
-            <!--                android:orientation="vertical"-->
-            <!--                android:padding="10dp"-->
-            <!--                android:gravity="center"-->
-            <!--                android:id="@+id/call_button"-->
-            <!--                android:clickable="true"-->
-            <!--                android:fontFamily="@font/maven_pro_medium"-->
-            <!--                android:background="@drawable/button_background">-->
-
-            <!--                <ImageView-->
-            <!--                    android:layout_width="80dp"-->
-            <!--                    android:layout_height="80dp"-->
-            <!--                    android:src="@drawable/ic_call"-->
-            <!--                    android:padding="10dp"-->
-            <!--                    android:clickable="false"-->
-            <!--                    />-->
-
-            <!--                <TextView-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:text="Trusted Contact"-->
-            <!--                    android:fontFamily="@font/maven_pro_medium"-->
-            <!--                    android:textColor="@color/text_colour_white"-->
-            <!--                    android:clickable="false"-->
-            <!--                    android:textSize="14sp"/>-->
-
-            <!--            </LinearLayout>-->
-
-            <!--            <LinearLayout-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_weight="1"-->
-            <!--                android:orientation="vertical"-->
-            <!--                android:id="@+id/settings_button"-->
-            <!--                android:padding="10dp"-->
-            <!--                android:gravity="center"-->
-            <!--                android:clickable="true"-->
-            <!--                android:layout_marginEnd="1dp"-->
-            <!--                android:layout_marginStart="1dp"-->
-            <!--                android:fontFamily="@font/maven_pro_medium"-->
-            <!--                android:background="@drawable/button_background">-->
-
-            <!--                <ImageView-->
-            <!--                    android:layout_width="80dp"-->
-            <!--                    android:layout_height="80dp"-->
-            <!--                    android:src="@drawable/ic_settings"-->
-            <!--                    android:padding="10dp"-->
-            <!--                    android:clickable="false"-->
-            <!--                    />-->
-
-            <!--                <TextView-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:fontFamily="@font/maven_pro_medium"-->
-            <!--                    android:text="Settings"-->
-            <!--                    android:textColor="@color/text_colour_white"-->
-            <!--                    android:clickable="false"-->
-            <!--                    android:textSize="14sp"/>-->
-
-            <!--            </LinearLayout>-->
 
         </LinearLayout>
 

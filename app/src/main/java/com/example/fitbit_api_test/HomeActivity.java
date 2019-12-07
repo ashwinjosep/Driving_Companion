@@ -2,7 +2,6 @@ package com.example.fitbit_api_test;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.Ringtone;
@@ -11,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
@@ -39,8 +39,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = HomeActivity.class.getSimpleName();
@@ -59,6 +59,9 @@ public class HomeActivity extends AppCompatActivity {
 
     int user_activity = 0;
     int confidence = 99;
+    Timer timer;
+    TimerTask timerTask;
+    final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,10 @@ public class HomeActivity extends AppCompatActivity {
         startActivityTracking();
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
                 new IntentFilter(PrefsHelper.BROADCAST_DETECTED_ACTIVITY));
+        if(new PrefsHelper(this).getLocationTrackingStatus()) {
+            Intent locationSyncServiceIntent = new Intent(getApplicationContext(), LocationPollingService.class);
+            startService(locationSyncServiceIntent);
+        }
     }
 
     @Override
@@ -103,19 +110,20 @@ public class HomeActivity extends AppCompatActivity {
             Log.d("displayDrowsy", "conditions met");
             SimulateDrowsiness object = new SimulateDrowsiness();
             object.execute();
-
         }
-        getData fitbitObject = new getData();
-        fitbitObject.execute();
+        startTimer();
         prefsHelper.setStartedDriving(true);
+        prefsHelper.setLocationTrackingStatus(true);
         Intent locationSyncServiceIntent = new Intent(getApplicationContext(), LocationPollingService.class);
         startService(locationSyncServiceIntent);
     }
 
     private void stopLocationTracking() {
         prefsHelper.setStartedDriving(false);
+        prefsHelper.setLocationTrackingStatus(false);
         Intent locationSyncServiceIntent = new Intent(getApplicationContext(), LocationPollingService.class);
         stopService(locationSyncServiceIntent);
+        stoptimertask();
     }
 
     private void startActivityTracking() {
@@ -128,6 +136,41 @@ public class HomeActivity extends AppCompatActivity {
         prefsHelper.setStartedDriving(false);
         Intent intent = new Intent(HomeActivity.this, BackgroundDetectedActivitiesService.class);
         stopService(intent);
+    }
+
+    public void startTimer() {
+        //set a new Timer
+        timer = new Timer();
+
+        //initialize the TimerTask's job
+        initializeTimerTask();
+
+        timer.schedule(timerTask, 1000, 15000); //
+    }
+
+    public void stoptimertask() {
+        //stop the timer, if it's not already null
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
+    public void initializeTimerTask() {
+
+        timerTask = new TimerTask() {
+            public void run() {
+
+                //use a handler to run a toast that shows the current timestamp
+                handler.post(new Runnable() {
+                    public void run() {
+                        //get the current timeStamp
+                        GetData fitbitObject = new GetData();
+                        fitbitObject.execute();
+                    }
+                });
+            }
+        };
     }
 
     private void resetGif() {
@@ -322,8 +365,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-
-    public void getHeartRate() throws IOException {
+    public JsonObject getHeartRate() throws IOException {
         Log.d("getHeartRate", "inside get heart rate function");
 
         URL url = new URL("https://api.fitbit.com/1/user/-/activities/heart/date/today/1d.json");
@@ -346,6 +388,7 @@ public class HomeActivity extends AppCompatActivity {
                 br.close();
                 JsonObject jobj = new Gson().fromJson(sb.toString(), JsonObject.class);
                 Log.d("getHeartRate-Buffer Values", jobj.toString());
+                return jobj;
 
                 //need to write function to save values and test against model
             }
@@ -355,12 +398,14 @@ public class HomeActivity extends AppCompatActivity {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         } finally {
             urlConnection.disconnect();
         }
+        return null;
     }
 
-    public class getData extends AsyncTask<String, String, String>
+    public class GetData extends AsyncTask<String, String, String>
     {
 
         @Override
@@ -371,10 +416,13 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
+            JsonObject heartRate;
             Log.d("getHeartRate", "get request in progress");
             try {
-                getHeartRate();
-                return "done";
+                heartRate = getHeartRate();
+                if(heartRate!=null){
+                    // send Heart Rate
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
