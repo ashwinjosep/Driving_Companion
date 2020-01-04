@@ -189,7 +189,7 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
         String longitude = PrefsHelper.getLongitude();
 
         //build url
-        final String maps_key = "AIzaSyDfXc0yfnSriPI2m_eygoPTLHm_sZUaaI4";
+        final String maps_key = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
         URL url = new URL("https://maps.googleapis.com/maps/api/place/nearbysearch/json?key="
                 +maps_key+"&location="+latitude+","+longitude+"&keyword=coffee&radius=5000");
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
