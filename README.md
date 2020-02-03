@@ -7,7 +7,7 @@ Driving companion is an Android application that connects to a user's fitbit dev
 width="200" hspace="10" vspace="10">](/images/splash_screen.png)
 [<img src="/images/login_screen.png" align="center"
 width="200" hspace="10" vspace="10">](/images/login_screen.png)
-[<br>]
+<br><br>
 [<img src="/images/home_idle.png" align="left"
 width="200" hspace="10" vspace="10">](/images/home_idle.png)
 [<img src="/images/home_driving.png" align="center"
